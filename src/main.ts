@@ -1,6 +1,6 @@
 import Vue, { createApp } from "vue";
 
-import { FundingAcknowledgment, IconButton } from "@minids/common";
+import { FundingAcknowledgment, IconButton } from "@cosmicds/vue-toolkit";
 import JwstBrick from "./JwstBrick.vue";
 import CreditLogos from "./CreditLogos.vue";
 import PlacesGallery from "./PlacesGallery.vue";
