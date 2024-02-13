@@ -29,14 +29,14 @@ library.add(faLocationCrosshairs);
 const update = (el: HTMLElement, binding: Vue.DirectiveBinding) => el.style.visibility = (binding.value) ? "hidden" : "";
 
 createApp(JwstBrick, {
-  wwtNamespace: "wwt-minids-jwst-brick",
+  wwtNamespace: "wwt-jwst-brick",
   wtml: {
-    nostars: "https://cosmicds.github.io/cds-website/wwt-content/JWST-Brick-wostars/index.wtml",
-    stars: "https://cosmicds.github.io/cds-website/wwt-content/JWST-Brick-wstars/index.wtml",
-    // glimpse: "https://cosmicds.github.io/cds-website/wwt-content/glimpse_original.wtml",
+    nostars: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/JWST-Brick-wostars/index.wtml",
+    stars: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/JWST-Brick-wstars/index.wtml",
+    // glimpse: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/glimpse_original.wtml",
     zannotation: "https://raw.githubusercontent.com/johnarban/wwt_interactives/main/images/adam/annotation/index.wtml",
   },
-  bgWtml: "https://cosmicds.github.io/cds-website/wwt-content/glimpse_original.wtml",
+  bgWtml: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/glimpse_original.wtml",
   bgName: "GLIMPSE Original"
 })
  
