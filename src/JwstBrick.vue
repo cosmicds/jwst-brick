@@ -42,7 +42,7 @@
         </div>
         
         <div id="splash-screen-acknowledgements">
-          This Mini Data Story is brought to you by <a href="https://www.cosmicds.cfa.harvard.edu/" target="_blank" rel="noopener noreferrer">Cosmic Data Stories</a> and <a href="https://www.worldwidetelescope.org/home/" target="_blank" rel="noopener noreferrer">WorldWide Telescope</a>.
+          Brought to you by <a href="https://www.cosmicds.cfa.harvard.edu/" target="_blank" rel="noopener noreferrer">Cosmic Data Stories</a> and <a href="https://www.worldwidetelescope.org/home/" target="_blank" rel="noopener noreferrer">WorldWide Telescope</a>.
           
           <div id="splash-screen-logos">
             <credit-logos/>
@@ -339,7 +339,7 @@
                       <h3>Credits</h3>
 
 
-                      <h4><a href="https://www.cosmicds.cfa.harvard.edu/" target="_blank" rel="noopener noreferrer">CosmicDS</a> Mini Stories Team:</h4>
+                      <h4><a href="https://www.cosmicds.cfa.harvard.edu/" target="_blank" rel="noopener noreferrer">CosmicDS</a> Team:</h4>
                       John Lewis<br>
                       Pat Udomprasert<br>
                       Jon Carifio<br>
@@ -852,7 +852,7 @@ body {
 
 
 /*
-  The main content of the mini.
+  The main content of the data story.
   The --app-content-height allows the app to shrink when the text is open
  */
 #main-content {
