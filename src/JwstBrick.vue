@@ -179,16 +179,16 @@
       <div id="project-credits">
         <div id="icons-container">
           <a href="https://www.cosmicds.cfa.harvard.edu/" target="_blank" rel="noopener noreferrer"
-          ><img alt="CosmicDS Logo" src="https://cosmicds.github.io/cds-website/logos/cosmicds_logo_for_dark_backgrounds.png"
+          ><img alt="CosmicDS Logo" src="https://projects.cosmicds.cfa.harvard.edu/cds-website/logos/cosmicds_logo_for_dark_backgrounds.png"
           /></a>
           <a href="https://worldwidetelescope.org/home/" target="_blank" rel="noopener noreferrer"
-            ><img alt="WWT Logo" src="https://cosmicds.github.io/cds-website/logos/logo_wwt.png"
+            ><img alt="WWT Logo" src="https://projects.cosmicds.cfa.harvard.edu/cds-website/logos/logo_wwt.png"
           /></a>
           <a href="https://science.nasa.gov/learners" target="_blank" rel="noopener noreferrer" class="pl-1"
-            ><img alt="SciAct Logo" src="https://cosmicds.github.io/cds-website/logos/logo_sciact.png"
+            ><img alt="SciAct Logo" src="https://projects.cosmicds.cfa.harvard.edu/cds-website/logos/logo_sciact.png"
           /></a>
           <a href="https://nasa.gov/" target="_blank" rel="noopener noreferrer" class="pl-1"
-            ><img alt="SciAct Logo" src="https://cosmicds.github.io/cds-website/logos/NASA_Partner_color_300_no_outline.png"
+            ><img alt="SciAct Logo" src="https://projects.cosmicds.cfa.harvard.edu/cds-website/logos/NASA_Partner_color_300_no_outline.png"
           /></a>
         </div>
       </div>
@@ -814,7 +814,7 @@ export default defineComponent({
 <style lang="less">
 @font-face {
   font-family: "Highway Gothic Narrow";
-  src: url("https://cosmicds.github.io/cds-website/fonts/HighwayGothicNarrow.ttf");
+  src: url("https://projects.cosmicds.cfa.harvard.edu/cds-website/fonts/HighwayGothicNarrow.ttf");
 }
 
 :root {
@@ -916,7 +916,7 @@ body {
     align-items: center;
     justify-content: center;
     .spinner {
-      background-image: url("https://cosmicds.github.io/cds-website/logos/lunar_loader.gif");
+      background-image: url("https://projects.cosmicds.cfa.harvard.edu/cds-website/logos/lunar_loader.gif");
       background-repeat: no-repeat;
       background-size: contain;
       width: 3rem;
@@ -941,7 +941,7 @@ body {
   div {
     margin: 0;
     padding: 0;
-    background-image: url("https://cosmicds.github.io/cds-website/logos/wwt_globe_bg.png");
+    background-image: url("https://projects.cosmicds.cfa.harvard.edu/cds-website/logos/wwt_globe_bg.png");
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
