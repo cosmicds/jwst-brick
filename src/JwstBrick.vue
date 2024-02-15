@@ -916,7 +916,7 @@ body {
     align-items: center;
     justify-content: center;
     .spinner {
-      background-image: url("https://projects.cosmicds.cfa.harvard.edu/cds-website/logos/lunar_loader.gif");
+      background-image: url("https://projects.cosmicds.cfa.harvard.edu/cds-website/misc/lunar_loader.gif");
       background-repeat: no-repeat;
       background-size: contain;
       width: 3rem;

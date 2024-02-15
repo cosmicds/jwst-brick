@@ -34,7 +34,7 @@ createApp(JwstBrick, {
     nostars: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/JWST-Brick-wostars/index.wtml",
     stars: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/JWST-Brick-wstars/index.wtml",
     // glimpse: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/glimpse_original.wtml",
-    zannotation: "https://raw.githubusercontent.com/johnarban/wwt_interactives/main/images/adam/annotation/index.wtml",
+    zannotation: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/JWST-Brick-Annotation/index.wtml",
   },
   bgWtml: "https://projects.cosmicds.cfa.harvard.edu/cds-website/wwt-content/glimpse_original.wtml",
   bgName: "GLIMPSE Original"
