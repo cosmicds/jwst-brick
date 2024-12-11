@@ -27,11 +27,12 @@
       >
         <div
           id="first-splash-row"
-      >
-        <div
+        >
+          <font-awesome-icon
             id="close-splash-button"
             @click="closeSplashScreen"
-            >&times;</div>
+            icon="xmark"
+          />
           <div id="splash-screen-text">
             <p>Want to see JWST's view of our</p>
             <p class="highlight"> Galactic Center? </p>
@@ -1094,7 +1095,7 @@ body {
   padding-bottom: 1rem;
   padding-inline: 0.5rem;
 
-  border-radius: 50px;
+  border-radius: 30px;
   border: min(1.2vw, 0.9vh) solid var(--accent-color);
   overflow: auto;
   font-family: 'Highway Gothic Narrow', 'Roboto', sans-serif;
@@ -1129,11 +1130,11 @@ body {
 
   #close-splash-button {
     position: absolute;
-    top: 0.5rem;
-    right: 1.75rem;
+    top: 20px;
+    right: 20px;
     text-align: end;
     color: var(--accent-color);
-    font-size: min(8vw, 5vh);
+    font-size: min(5vw, 4vh);
 
     &:hover {
       cursor: pointer;
