@@ -34,12 +34,25 @@
             icon="xmark"
           />
           <div id="splash-screen-text">
-            <p>Want to see JWST's view of our</p>
-            <p class="highlight"> Galactic Center? </p>
+            Want to see JWST's view of our <span class="highlight">Galactic Center?</span>
           </div>
         </div>
         
         <div id="splash-screen-guide">
+        </div>
+
+        <div>
+          <v-btn
+            class="splash-get-started"
+            @click="closeSplashScreen"
+            :color="accentColor"
+            :density="xSmallSize ? 'compact' : 'default'"
+            size="x-large"
+            variant="elevated"
+            rounded="lg"
+          >
+            Get Started
+          </v-btn>
         </div>
         
         <div id="splash-screen-acknowledgements">
@@ -617,6 +630,11 @@ export default defineComponent({
     smallSize(): boolean {
       return this.$vuetify.display.smAndDown;
     },
+
+    xSmallSize(): boolean {
+      return this.$vuetify.display.xs;
+    },
+
     mobile(): boolean {
       return this.smallSize && this.touchscreen;
     },
@@ -1146,7 +1164,16 @@ body {
     display: flex;
     flex-direction: column;
     line-height: 130%;
+    padding: 0 2rem;
     
+  }
+
+  .splash-get-started {
+    border: 2px solid white;
+    font-size: calc(1.8 * var(--default-font-size));
+    margin-top: 5%;
+    margin-bottom: 2%;
+    font-weight: bold !important;
   }
 
   #splash-screen-guide {
@@ -1166,6 +1193,7 @@ body {
   }
 
   #splash-screen-acknowledgements {
+    margin-top: 3rem;
     font-size: calc(1.7 * var(--default-font-size));
     line-height: calc(1.5 * var(--default-line-height));
     width: 70%; 
