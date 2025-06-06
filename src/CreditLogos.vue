@@ -10,9 +10,6 @@
       <a href="https://science.nasa.gov/learners" target="_blank" rel="noopener noreferrer" class="pl-1"
         ><img alt="SciAct Logo" src="https://cosmicds.github.io/cds-website/logos/logo_sciact.png"
       /></a>
-      <a href="https://nasa.gov/" target="_blank" rel="noopener noreferrer" class="pl-1"
-        ><img alt="SciAct Logo" src="https://cosmicds.github.io/cds-website/logos/NASA_Partner_color_300_no_outline.png"
-      /></a>
     </div>
   </div>
 </template>
