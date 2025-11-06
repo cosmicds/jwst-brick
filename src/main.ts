@@ -1,6 +1,6 @@
 import Vue, { createApp } from "vue";
 
-import { FundingAcknowledgment, IconButton } from "@cosmicds/vue-toolkit";
+import { FundingAcknowledgment, IconButton, UserExperience } from "@cosmicds/vue-toolkit";
 import JwstBrick from "./JwstBrick.vue";
 import CreditLogos from "./CreditLogos.vue";
 import PlacesGallery from "./PlacesGallery.vue";
@@ -67,6 +67,7 @@ createApp(JwstBrick, {
   .component('credit-logos', CreditLogos)
   .component('funding-acknowledgement', FundingAcknowledgment)
   .component('places-gallery', PlacesGallery)
+  .component('user-experience', UserExperience)
 
   // Mount
   .mount("#app");
