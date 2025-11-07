@@ -384,15 +384,27 @@
           }"
         >
           <template #footer>
-            <v-btn
-              class="privacy-button"
-              color="#BDBDBD"
-              href="https://www.cfa.harvard.edu/privacy-statement"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-            Privacy Policy
-            </v-btn>
+            <div id="user-experience-footer">
+              <v-btn
+                  class="rating-opt-put"
+                  color="#BDBDBD"
+                  size="small"
+                  variant="text"
+                  @click="onOptOutClicked"
+                >
+                Don't show again
+                </v-btn>
+              <v-btn
+                class="privacy-button"
+                color="#BDBDBD"
+                href="https://www.cfa.harvard.edu/privacy-statement"
+                size="small"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+              Privacy Policy
+              </v-btn>
+            </div>
           </template>
         </user-experience>
       </v-expand-transition>
@@ -450,6 +462,8 @@ export default defineComponent({
   data() {
     const maybeUUID = window.localStorage.getItem("cds-green-comet-uuid");
     const uuid = maybeUUID ?? v4();
+    const ratingOptedOut = window.localStorage.getItem("cds-green-comet-rating-optout")?.toLowerCase() === "true";
+
     return {
       layers: {} as Record<string,ImageSetLayer>,
       cfOpacity: 100, // out of 100
@@ -480,6 +494,7 @@ export default defineComponent({
 
       tab: 0,
 
+      ratingOptedOut,
       locationErrorMessage: "",
       showRating: false,
       storyRatingUrl: `${API_BASE_URL}/jwst-brick/user-experience`,
@@ -759,6 +774,10 @@ export default defineComponent({
     },
 
     async ratingDisplaySetup() {
+      if (this.ratingOptedOut) {
+        return;
+      }
+
       const existsResponse = await fetch(`${this.storyRatingUrl}/${this.uuid}`, {
         method: "GET",
         // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -772,7 +791,7 @@ export default defineComponent({
       }
       setTimeout(() => {
         this.showRating = true;
-      }, 1_000);
+      }, 30_000);
     },
 
     updateUserExperienceInfo(rating: UserExperienceRating | null, comments: string | null) {
@@ -797,6 +816,12 @@ export default defineComponent({
         },
         body: JSON.stringify(body),
       });
+    },
+
+    onOptOutClicked() {
+      this.showRating = false;
+      this.ratingOptedOut = true;
+      window.localStorage.setItem("cds-green-comet-rating-optout", "true");
     },
   },
 
@@ -861,9 +886,6 @@ export default defineComponent({
     selectedGalleryItem(_place: Place | null) {
     },
 
-    
-    
-    
     showLayers(show: boolean) {
       Object.values(this.layers).forEach(layer => {
         applyImageSetLayerSetting(layer, ["opacity", show ? 1 : 0]);
@@ -1597,10 +1619,10 @@ img#brick-diagram {
     padding: 0;
   }
 
-  .privacy-button {
-    font-size: 10px;
-    position: absolute;
-    left: 5px;
+   #user-experience-footer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
   }
 
   .v-btn.bg-success {
