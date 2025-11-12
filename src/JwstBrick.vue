@@ -460,9 +460,9 @@ export default defineComponent({
   },
 
   data() {
-    const maybeUUID = window.localStorage.getItem("cds-green-comet-uuid");
+    const maybeUUID = window.localStorage.getItem("cds-jwst-brick-uuid");
     const uuid = maybeUUID ?? v4();
-    const ratingOptedOut = window.localStorage.getItem("cds-green-comet-rating-optout")?.toLowerCase() === "true";
+    const ratingOptedOut = window.localStorage.getItem("cds-jwst-brick-rating-optout")?.toLowerCase() === "true";
 
     return {
       layers: {} as Record<string,ImageSetLayer>,
@@ -791,7 +791,7 @@ export default defineComponent({
       }
       setTimeout(() => {
         this.showRating = true;
-      }, 30_000);
+      }, 1_000);
     },
 
     updateUserExperienceInfo(rating: UserExperienceRating | null, comments: string | null) {
@@ -821,7 +821,7 @@ export default defineComponent({
     onOptOutClicked() {
       this.showRating = false;
       this.ratingOptedOut = true;
-      window.localStorage.setItem("cds-green-comet-rating-optout", "true");
+      window.localStorage.setItem("cds-jwst-brick-rating-optout", "true");
     },
   },
 
