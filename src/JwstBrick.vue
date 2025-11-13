@@ -37,9 +37,6 @@
             Want to see JWST's view of our <span class="highlight">Galactic Center?</span>
           </div>
         </div>
-        
-        <div id="splash-screen-guide">
-        </div>
 
         <div>
           <v-btn
