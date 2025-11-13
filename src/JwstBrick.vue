@@ -374,6 +374,53 @@
       </v-card>
     </v-dialog>
 
+    <v-container>
+      <v-expand-transition>
+        <user-experience
+          v-if="showRating"
+          :question="question"
+          icon-size="3x"
+          @dismiss="(_rating: UserExperienceRating | null, _comments: string | null) => {
+            showRating = false;
+          }"
+          @rating="(rating: UserExperienceRating | null) => {
+            currentRating = rating;
+            updateUserExperienceInfo(currentRating, currentComments);
+          }"
+          @finish="(rating: UserExperienceRating | null, comments: string | null) => {
+            currentRating = rating;
+            currentComments = comments;
+            updateUserExperienceInfo(currentRating, currentComments);
+            showRating = false;
+          }"
+        >
+          <template #footer>
+            <div id="user-experience-footer" class="mt-4">
+              <v-btn
+                  class="rating-opt-put"
+                  color="#BDBDBD"
+                  size="small"
+                  variant="text"
+                  @click="onOptOutClicked"
+                >
+                Don't show again
+                </v-btn>
+              <v-btn
+                class="privacy-button"
+                color="#BDBDBD"
+                href="https://www.cfa.harvard.edu/privacy-statement"
+                size="small"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+              Privacy Policy
+              </v-btn>
+            </div>
+          </template>
+        </user-experience>
+      </v-expand-transition>
+    </v-container>
+
   </div>
 </v-app>
 </template>
@@ -382,8 +429,9 @@
 import { ImageSetLayer, Place, Settings } from "@wwtelescope/engine";
 import { applyImageSetLayerSetting } from "@wwtelescope/engine-helpers";
 import { defineComponent, PropType } from "vue";
-import { MiniDSBase, BackgroundImageset, skyBackgroundImagesets } from "@cosmicds/vue-toolkit";
+import { API_BASE_URL, MiniDSBase, BackgroundImageset, skyBackgroundImagesets, type UserExperienceRating } from "@cosmicds/vue-toolkit";
 import { GotoRADecZoomParams } from "@wwtelescope/engine-pinia";
+import { v4 } from "uuid";
 
 type ToolType = "crossfade" | "choose-background" | null;
 type SheetType = "text" | "video" | null;
@@ -423,6 +471,10 @@ export default defineComponent({
   },
 
   data() {
+    const maybeUUID = window.localStorage.getItem("cds-jwst-brick-uuid");
+    const uuid = maybeUUID ?? v4();
+    const ratingOptedOut = window.localStorage.getItem("cds-jwst-brick-rating-optout")?.toLowerCase() === "true";
+
     return {
       layers: {} as Record<string,ImageSetLayer>,
       cfOpacity: 100, // out of 100
@@ -451,7 +503,18 @@ export default defineComponent({
 
       initialPosition: {ra: 266.5375, dec:-28.708, zoom: 120 },
 
-      tab: 0
+      tab: 0,
+
+      ratingOptedOut,
+      locationErrorMessage: "",
+      showRating: false,
+      storyRatingUrl: `${API_BASE_URL}/jwst-brick/user-experience`,
+      uuid,
+      currentRating: null as UserExperienceRating | null,
+      currentComments: null as string | null,
+      question: Math.random() > 0.5 ?
+        "Does this spark your curiosity?" :
+        "Are you learning something new?",
     };
   },
 
@@ -539,16 +602,8 @@ export default defineComponent({
   },
 
   mounted() {
-    // only needed for intro video
-    // this.$nextTick(() => {
-    //   setTimeout(() => {
-    //     this.crossfadeJWST = 0;
-    //     this.$nextTick(() => {
-    //       this.crossfadeOpacity = 0;
-    //     });
-    //   }, 1000);
-    // });
-    
+    window.localStorage.setItem("cds-jwst-brick-uuid", this.uuid);
+    this.ratingDisplaySetup();
   },
 
   computed: {
@@ -733,7 +788,58 @@ export default defineComponent({
       } else {
         this.sheet = name;
       }
-    }
+    },
+
+    async ratingDisplaySetup() {
+      if (this.ratingOptedOut) {
+        return;
+      }
+
+      const existsResponse = await fetch(`${this.storyRatingUrl}/${this.uuid}`, {
+        method: "GET",
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        headers: { "Authorization": process.env.VUE_APP_CDS_API_KEY ?? "" }
+      });
+      // NB: If we want to ask multiple questions, this logic can be adjusted
+      const existsContent = await existsResponse.json();
+      const exists = existsResponse.status === 200 && existsContent.ratings?.length > 0;
+      if (exists) {
+        return;
+      }
+      setTimeout(() => {
+        this.showRating = true;
+      }, 30_000);
+    },
+
+    updateUserExperienceInfo(rating: UserExperienceRating | null, comments: string | null) {
+      const body: Record<string, unknown> = {
+        uuid: this.uuid,
+        question: this.question,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        story_name: "jwst-brick",
+      };
+      if (rating) {
+        body.rating = rating;
+      }
+      if (comments) {
+        body.comments = comments;
+      }
+      fetch(this.storyRatingUrl, {
+        method: "PUT",
+        headers: {
+          // eslint-disable-next-line @typescript-eslint/naming-convention
+          "Authorization": process.env.VUE_APP_CDS_API_KEY ?? "",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+    },
+
+    onOptOutClicked() {
+      this.showRating = false;
+      this.ratingOptedOut = true;
+      window.localStorage.setItem("cds-jwst-brick-rating-optout", "true");
+    },
   },
 
   watch: {
@@ -797,9 +903,6 @@ export default defineComponent({
     selectedGalleryItem(_place: Place | null) {
     },
 
-    
-    
-    
     showLayers(show: boolean) {
       Object.values(this.layers).forEach(layer => {
         applyImageSetLayerSetting(layer, ["opacity", show ? 1 : 0]);
@@ -1479,6 +1582,10 @@ a {
   }
 }
 
+.gallery-item.selected {
+  box-shadow: none !important;
+}
+
 @media only screen and (max-width: 600px) {
   #icons-container {
     display: none;
@@ -1499,8 +1606,64 @@ img#brick-diagram {
     display: inline;
     float: right;
   }
-  
 }
 
+.rating-root {
+  position: absolute !important;
+  right: 5px;
+  bottom: 0;
+  padding: 5px;
+  width: fit-content !important;
+  // left: 50%;
+  // transform: translateX(-50%);
+  gap: 0 !important;
+  border: solid 1px #EFEFEF !important;
+  border-radius: 10px !important;
+  background-color: #222222 !important;
+  opacity: 0.95 !important;
+  z-index: 20000 !important;
 
+  .rating-title {
+    color: #EFEFEF;
+    font-size: var(--default-font-size);
+  }
+
+  .rating-icon-row {
+    
+    padding: 0px;
+
+    .svg-inline--fa {
+      height: 30px;
+    }
+  }
+
+  .comments-box {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .v-card-text {
+    padding-bottom: 0;
+  }
+
+  .v-card-actions {
+    padding: 0;
+  }
+
+   #user-experience-footer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .close-button {
+    position: absolute !important;
+    color: white !important;
+  }
+
+  .v-field--variant-filled .v-field__outline:before, .v-field--variant-underlined .v-field__outline:before, 
+  .v-field--variant-filled .v-field__outline:after, .v-field--variant-underlined .v-field__outline:after {
+    border-style: none !important;
+  }
+}
 </style>
