@@ -395,7 +395,7 @@
           }"
         >
           <template #footer>
-            <div id="user-experience-footer">
+            <div id="user-experience-footer" class="mt-4">
               <v-btn
                   class="rating-opt-put"
                   color="#BDBDBD"
@@ -1582,6 +1582,10 @@ a {
   }
 }
 
+.gallery-item.selected {
+  box-shadow: none !important;
+}
+
 @media only screen and (max-width: 600px) {
   #icons-container {
     display: none;
@@ -1617,7 +1621,7 @@ img#brick-diagram {
   border-radius: 10px !important;
   background-color: #222222 !important;
   opacity: 0.95 !important;
-  z-index: 20000;
+  z-index: 20000 !important;
 
   .rating-title {
     color: #EFEFEF;
