@@ -408,7 +408,8 @@
               <v-btn
                 class="privacy-button"
                 color="#BDBDBD"
-                href="https://www.cfa.harvard.edu/privacy-statement"
+                @click="showPrivacyPolicy = true"
+                @keyup.enter="showPrivacyPolicy = true"
                 size="small"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -419,6 +420,7 @@
           </template>
         </user-experience>
       </v-expand-transition>
+      <cds-privacy-policy v-model="showPrivacyPolicy" />
     </v-container>
 
   </div>
@@ -497,6 +499,8 @@ export default defineComponent({
       
       showOverlay: false,
       overlayWasVisible: false,
+      
+      showPrivacyPolicy: false,
       
       accentColor: "#F0AB52",
       accentColor2: "#99c8ff",

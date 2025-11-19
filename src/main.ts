@@ -3,6 +3,7 @@ import Vue, { createApp } from "vue";
 import { CreditLogos, FundingAcknowledgment, IconButton, UserExperience } from "@cosmicds/vue-toolkit";
 import JwstBrick from "./JwstBrick.vue";
 import PlacesGallery from "./PlacesGallery.vue";
+import CDSPrivacyPolicy from "./CDSPrivacyPolicy.vue";
 
 import vuetify from "../plugins/vuetify";
 
@@ -67,6 +68,7 @@ createApp(JwstBrick, {
   .component('funding-acknowledgement', FundingAcknowledgment)
   .component('places-gallery', PlacesGallery)
   .component('user-experience', UserExperience)
+  .component('cds-privacy-policy', CDSPrivacyPolicy)
 
   // Mount
   .mount("#app");
