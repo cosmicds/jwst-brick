@@ -113,6 +113,7 @@
       <div id="right-buttons">
       </div>
       <places-gallery
+        v-if="!showWebGL2Warning"
         :stay-open="true"
         :places-list="jwstPlaces"
         :alt-labels="['with stars', 'no stars']"
@@ -198,6 +199,28 @@
       </div>
     </div>
 
+    <!-- WebGL2 not enabled dialog --> 
+    <v-dialog
+      class="error-dialog"
+      :style="cssVars"
+      v-model="showWebGL2Warning"
+      persistent
+    >
+      <v-card>
+        <div class="error-message">
+          <p>
+            <strong>This app requires WebGL 2</strong> 
+          </p>
+          <p class="mt-2">
+            Check your browser's settings and enable WebGL 2 ("graphics acceleration" on some browsers).
+          </p> 
+          <p class="mt-2">
+            You can check whether your browser supports WebGL 2
+            and get assistance <a href="https://get.webgl.org/webgl2/" target="_blank" rel="noopener noreferrer">here</a>.
+          </p> 
+        </div>
+      </v-card>
+    </v-dialog>
 
     <!-- This dialog contains the video that is displayed when the video icon is clicked -->
 
@@ -428,7 +451,7 @@
 </template>
 
 <script lang="ts">
-import { ImageSetLayer, Place, Settings } from "@wwtelescope/engine";
+import { ImageSetLayer, Place, Settings, WWTControl } from "@wwtelescope/engine";
 import { applyImageSetLayerSetting } from "@wwtelescope/engine-helpers";
 import { defineComponent, PropType } from "vue";
 import { API_BASE_URL, MiniDSBase, BackgroundImageset, skyBackgroundImagesets, type UserExperienceRating } from "@cosmicds/vue-toolkit";
@@ -478,6 +501,7 @@ export default defineComponent({
     const ratingOptedOut = window.localStorage.getItem("cds-jwst-brick-rating-optout")?.toLowerCase() === "true";
 
     return {
+      showWebGL2Warning: false,
       layers: {} as Record<string,ImageSetLayer>,
       cfOpacity: 100, // out of 100
       ready: false,
@@ -523,6 +547,15 @@ export default defineComponent({
   },
 
   created() {
+
+    if (!this.isWebGL2Enabled()) {
+      this.showWebGL2Warning = true;
+      this.layersLoaded = true;
+      this.positionSet = true;
+      this.showSplashScreen = false;
+      return;
+    }
+
     this.waitForReady().then(async () => {
       
       this.backgroundImagesets = [...skyBackgroundImagesets];
@@ -606,8 +639,17 @@ export default defineComponent({
   },
 
   mounted() {
-    window.localStorage.setItem("cds-jwst-brick-uuid", this.uuid);
-    this.ratingDisplaySetup();
+    if (this.showWebGL2Warning) {
+      // eslint-disable-next-lint @typescript-eslint/ban-ts-comment
+      // @ts-expect-error `canvas` is defined
+      WWTControl.singleton.canvas.setAttribute("hidden", "true");
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      WWTControl.singleton.renderOneFrame = function() {};
+      return;
+    } else {
+      window.localStorage.setItem("cds-jwst-brick-uuid", this.uuid);
+      this.ratingDisplaySetup();
+    }
   },
 
   computed: {
@@ -844,12 +886,21 @@ export default defineComponent({
       this.ratingOptedOut = true;
       window.localStorage.setItem("cds-jwst-brick-rating-optout", "true");
     },
+
+    isWebGL2Enabled(): boolean {
+      // It doesn't seem like there's a better way to do this than just to try and get a context
+      // https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/By_example/Detect_WebGL
+      // NB: The engine specifically wants a webgl2 context
+      const canvas = document.createElement("canvas");
+      const gl = canvas.getContext("webgl2");
+      return gl instanceof WebGL2RenderingContext;
+    },
   },
 
   watch: {
     
     showSplashScreen(value: boolean) {
-      if (!value) {
+      if (!(value || this.showWebGL2Warning)) {
         this.goToBrickPosition(false).catch(() => {
           console.log('Move interrupted');
         });
@@ -918,7 +969,7 @@ export default defineComponent({
       }
     },
     ready(r: boolean) {
-      if (r) {
+      if (r && !this.showWebGL2Warning) {
         this.showSplashScreen = true;
       }
     }
@@ -1669,5 +1720,23 @@ img#brick-diagram {
   .v-field--variant-filled .v-field__outline:after, .v-field--variant-underlined .v-field__outline:after {
     border-style: none !important;
   }
+}
+
+.error-dialog {
+  width: auto;
+  height: auto;
+  max-width: 500px;
+  border-radius: 10px;
+
+  .v-card {
+    border-radius: 10px !important;
+  }
+}
+
+.error-message {
+  padding: 1rem;
+  border: 1px solid var(--accent-color);
+  text-align: center;
+  border-radius: 10px;
 }
 </style>
