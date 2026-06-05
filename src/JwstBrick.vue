@@ -648,7 +648,7 @@ export default defineComponent({
       return;
     } else {
       window.localStorage.setItem("cds-jwst-brick-uuid", this.uuid);
-      this.ratingDisplaySetup();
+      // this.ratingDisplaySetup();
     }
   },
 
